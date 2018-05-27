@@ -1,0 +1,78 @@
+package com.balaji.starting;
+class Printer
+{
+	boolean evenFlag = true;
+	synchronized public void printeven(int num)
+	{
+		if(evenFlag)
+		{
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		System.out.println(num);
+		evenFlag=true;
+		notify();
+	}
+	synchronized public void printodd(int num)
+	{
+		if(!evenFlag)
+		{
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		System.out.println(num);
+		evenFlag=false;
+		notify();
+	}
+}
+class Even extends Thread
+{
+	Printer P;
+	int index;
+	Even(Printer p,int index)
+	{
+		this.P=p;
+		this.index=index;
+	}
+	public void run() 
+	{
+	    for(int i=2;i<=index;i+=2)
+	       P.printeven(i);
+	}	
+}
+class Odd extends Thread
+{
+	Printer P;
+    int index;
+	Odd(Printer p,int index)
+	{
+		this.P=p;
+		this.index=index;
+	}
+	public void run()
+	{
+		    for(int i=1;i<=index;i+=2)
+		       P.printodd(i);
+	}	
+}
+public class Test 
+{
+	public static void main(String []args) throws InterruptedException
+	{
+		Printer P= new Printer();
+		Even t1 = new Even(P,20);
+		Odd t2 = new Odd(P,20);
+		t2.start();
+		//Thread.sleep(1000);
+		t1.start();
+		//System.out.println("Hello World!");
+	}
+}
