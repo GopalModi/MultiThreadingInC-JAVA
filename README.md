@@ -1,3 +1,3 @@
 # MultiThreadingInC-JAVA
 
-Here you can get basics of multithreading programs in java and c.
+Here you can get basic multithreading programs in java and c.
